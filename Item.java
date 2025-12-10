@@ -32,7 +32,7 @@ public class Item {
     public void eat() {
         if (eatable) {
             if(pickedUp){
-                System.out.println("You have ate " + name + ". So yummy!");
+                System.out.println("You ate " + name + ". So yummy!");
             } else{
                 System.out.println("You're not holding the " + name + ".");
             }

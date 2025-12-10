@@ -5,6 +5,8 @@ public class Person {
     protected RelationshipType relationship;
     protected ArrayList<String> avoids;
     protected ArrayList<String> wins;
+    private boolean greeted = false;
+
 
     public Person(String name, RelationshipType relationship) {
         this.name = name;
@@ -27,7 +29,12 @@ public class Person {
 
     public void greet() {
         System.out.println(name + " smiles: \"Thank you for the greeting!\"");
+        greeted = true;
     }
+
+    public boolean hasBeenGreeted() {
+    return greeted;
+}
 
     public boolean tell(String gossip) {
         if(avoids.contains(gossip)){
@@ -41,10 +48,10 @@ public class Person {
 
     public boolean give(String present) {
         if(wins.contains(present)){
-            System.out.println("You gave " + name + " " + present + "! That's their favorite. *You Win!*" );
+            System.out.println("You gave " + name + " " + present.toLowerCase() + "! That's " + name + "'s favorite. *You Win!*" );
             return true;
         } else{ 
-            System.out.println("You gave " + name + " " + present + ". They say thank you, but give it back");
+            System.out.println("You gave " + name + " " + present.toLowerCase() + ". " + name + " says thank you, but gives it back");
             return false;
         }
     }

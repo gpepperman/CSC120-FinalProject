@@ -85,10 +85,25 @@ public class GameLoop {
         boolean playing = true;
         String response;
 
-        System.out.println("******************");
+        System.out.println("****************************");
         System.out.println("WELCOME TO CHRISTMAS DINNER");
-        System.out.println("******************");
-        System.out.println("Commands: SIT DINING, SIT SNACK, SIT GIFT, UNSIT, LOOK ITEMS, QUIT");
+        System.out.println("****************************");
+        System.out.println("You arrive with a sack full of gifts to give out.");
+        System.out.println("You also arrive with a list of 'avoid' words.");
+        System.out.println("However, they are only 'avoid' words for specific guests.");
+        System.out.println("------- Items in the Sack: -------");
+        System.out.println("• Earring, Eagles Jacket, Hockey Stick,");
+        System.out.println("  Tulane Socks, Money, Paint, Ticket, Dress,");
+        System.out.println("  Pencil, Monitor, Picture, Guitar, Buddha");
+        System.out.println("------- Words to Avoid: -------");
+        System.out.println("• Spanish, Eric, Cancer, Exwife, ");
+        System.out.println("  Work, Wake Forest, Boyfriend,");
+        System.out.println("  Wedding, Mother, Girlfriend");
+        System.out.println("The room has 3 tables you can move between:");
+        System.out.println("------- Tables: -------");
+        System.out.println("• Snack Table, Dining Table, Gift Table");
+        System.out.println("To start the gave, sit at a table!");
+        
 
         while (playing) {
             System.out.print("> ");
@@ -220,6 +235,11 @@ public class GameLoop {
                     System.out.println(name + " is not at this table.");
                     continue;
                 }
+
+                if (!target.hasBeenGreeted()) {
+                     System.out.println("You cannot give " + name.toLowerCase() + " " + present.toLowerCase()+ " before greeting " + name.toLowerCase()+"!");
+                     continue;
+                    }
 
                 boolean lost = target.give(present);
                 if (lost) {
@@ -409,6 +429,76 @@ public class GameLoop {
                 
                 item.throwAt(person);
                 playing = false;
+            }
+
+            // -----------------------------
+            // HINTS
+            // -----------------------------
+            else if (response.equals("HINT")) {
+                System.out.println("Remeber you arrived with a bag full of gifts! You have to give it to correct guest to win!");
+                System.out.println("Don't remeber what you brought? Type: \"SACK REMINDER\"");
+                System.out.println("Don't remeber what not to say? Type: \"AVOIDS REMINDER\"");
+                System.out.println("Don't remeber what the tables are? Type: \"TABLES REMINDER\"");
+            }
+
+            else if (response.equals("SACK REMINDER")) {
+                System.out.println("------- Items in the Sack: -------");
+                System.out.println("• Earring, Eagles Jacket, Hockey Stick,");
+                System.out.println("  Tulane Socks, Money, Paint, Ticket, Dress,");
+                System.out.println("  Pencil, Monitor, Picture, Guitar, Buddha");
+            }
+
+            else if (response.equals("AVOIDS REMINDER")) {
+                System.out.println("------- Words to Avoid: -------");
+                System.out.println("• Spanish, Eric, Cancer, Exwife, ");
+                System.out.println("  Work, Wake Forest, Boyfriend,");
+                System.out.println("  Wedding, Mother, Girlfriend");
+            }
+
+            else if (response.equals("TABLES REMINDER")) {
+                System.out.println("------- Tables: -------");
+                System.out.println("• Snack Table, Dining Table, Gift Table");
+                }
+
+            else if (response.equals("BETTER HINT")) {
+                System.out.println("You want a better hint? Fine! Either Elizabeth, Abby, or Sarah want the earrings!");
+            }
+
+            // -----------------------------
+            // HELP
+            // -----------------------------
+            else if (response.equals("HELP")) {
+                System.out.println("******** Commands: ********");
+                System.out.println("------- Table Commands: -------");
+                System.out.println("• \"Sit {TABLE NAME}\" lets you sit at a specific table");
+                System.out.println("• \"Unsit {TABLE NAME}\" lets you unsit a specific table");
+                System.out.println("• \"Who\" lets you check who is at the table");
+                System.out.println("• \"What\" lets you check what items are on the table");
+
+                System.out.println("------- Item Commands: -------");
+                System.out.println("• \"Pick Up {item name}\" lets you pick up a specific item on the table");
+                System.out.println("• \"Put Down {item name}\" lets you put down a specific item on the table");
+                System.out.println("• \"Look At {item name}\" lets you look at a specific item on the table");
+                System.out.println("• \"Eat {item name}\" lets you eat a specific item on the table");
+                System.out.println("• \"Throw {item name} at {guest name}\" lets you throw a specific item on the table at a specific guest at the table");
+                System.out.println("• \"Open {item name}\" lets you open a specific item on the table");
+
+                System.out.println("------- Guest Commands: -------");
+                System.out.println("• \"Greet {guest name}\" lets you greet a specific guest at the table");
+                System.out.println("• \"Farewell {guest name}\" lets you say farewell to a specific guest at the table");
+                System.out.println("• \"Attack {guest name}\" lets you attack a specific guest at the table");
+                System.out.println("• \"Insult {guest name}\" lets you insult a specific guest at the table");
+                System.out.println("• \"Tell {guest name} {String}\" lets you tell a specific guest at the table something");
+                System.out.println("• \"Give {guest name} {gift from sack}\" lets you give a specific guest at the table a gift from your sack");
+                System.out.println("• \"Who is {guest name}\" lets you check your relationship to a specific guest at the table");
+
+                System.out.println("------- Hint Commands: -------");
+                System.out.println("• \"Quit\" lets you end the game");
+                System.out.println("• \"Hint\" give you a hint on how to win the game");
+                System.out.println("• \"Better Hint\" give you a better hint on how to win the game");
+                System.out.println("• \"Sack Reminder\" reminder you of the gifts you brought");
+                System.out.println("• \"Tables Reminder\" reminder you of the tables in the room");
+                System.out.println("• \"Avoids Reminder\" reminder you of the words to avoid in conversation");
             }
 
 

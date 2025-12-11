@@ -71,6 +71,7 @@ public class Item {
         if (opens) { //checks if item opens
             if (pickedUp) { //checks if item is currently picke up
                 System.out.println("You have opened " + name + "!");
+                System.out.println("Turns out " + name + " is empty and only decorative :(");
             } else {
                 System.out.println("You're not holding the " + name + ".");
             }

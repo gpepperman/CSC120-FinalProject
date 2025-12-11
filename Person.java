@@ -13,6 +13,7 @@ public class Person {
     protected ArrayList<String> avoids; //things to avoid in discussion
     protected ArrayList<String> wins; //thing you need to give them to win
     private boolean greeted = false; //if you have greeted them yet
+    protected String giftHint;
 
     /**
      * Constructs a new Person with the given name and relationship type.
@@ -20,9 +21,10 @@ public class Person {
      * @param name          the name of the guest
      * @param relationship  the player's relationship to this person
      */
-    public Person(String name, RelationshipType relationship) {
+    public Person(String name, RelationshipType relationship, String giftHint) {
         this.name = name;
         this.relationship = relationship;
+        this.giftHint = giftHint;
         this.avoids = new ArrayList<>();
         this.wins = new ArrayList<>();
     }
@@ -111,7 +113,7 @@ public class Person {
      * Prints this person's relationship to the player.
      */
     public void checkWho() {
-        System.out.println(name + " is your " + relationship + ".");
+        System.out.println(name + " is your " + relationship + ". " + giftHint);
     }
 
     /**

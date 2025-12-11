@@ -1,9 +1,16 @@
 import java.util.Scanner;
 
+/**
+ * The main game loop for the Christmas Dinner game.
+ */
 public class GameLoop {
 
     public static void main(String[] args) {
+        // -----------------------------
+        // GAME SET UP
+        // -----------------------------
 
+        // Dining table set up
         Table diningTable = new Table("Dining Table", false);
         Person elizabeth = new Person("Elizabeth", RelationshipType.parent);
         elizabeth.addAvoid("ERIC");
@@ -42,6 +49,7 @@ public class GameLoop {
         diningTable.addItem(bread);
         diningTable.addItem(potatos);
 
+        // Snack table set up
         Table snackTable = new Table("Snack Table", false);
         Person steve = new Person("Steve", RelationshipType.uncle);
         steve.addAvoid("CANCER");
@@ -60,6 +68,7 @@ public class GameLoop {
         snackTable.addItem(cake);
         snackTable.addItem(chips);
 
+        // Gift table set up
         Table giftTable = new Table("Gift Table", false);
         Person beth = new Person("Beth", RelationshipType.grandparent);
         beth.addAvoid("HUSBAND");
@@ -81,9 +90,14 @@ public class GameLoop {
         // Track where the player is sitting
         Table currentTable = null;
 
+        // Play loop set up 
         Scanner userInput = new Scanner(System.in);
         boolean playing = true;
         String response;
+
+        // -----------------------------
+        // INTRODUCTION/INSTRUCTIONS
+        // -----------------------------
 
         System.out.println("****************************");
         System.out.println("WELCOME TO CHRISTMAS DINNER");
@@ -103,19 +117,23 @@ public class GameLoop {
         System.out.println("------- Tables: -------");
         System.out.println("• Snack Table, Dining Table, Gift Table");
         System.out.println("To start the gave, sit at a table!");
-        
 
+        // -----------------------------
+        // GAME PLAY
+        // -----------------------------
         while (playing) {
-            System.out.print("> ");
-            response = userInput.nextLine().trim().toUpperCase();
+            System.out.print("> "); 
+            response = userInput.nextLine().trim().toUpperCase(); // make all responses uppercase to remove case sensitive issues
 
             // -----------------------------
-            // SIT COMMAND
+            // TABLE INTERACTIONS
             // -----------------------------
+
+            //SIT
             if (response.startsWith("SIT")) {
 
                 Table target = null;
-
+                
                 if (response.contains("DINING")) target = diningTable;
                 else if (response.contains("SNACK")) target = snackTable;
                 else if (response.contains("GIFT")) target = giftTable;
@@ -124,8 +142,8 @@ public class GameLoop {
                     continue;
                 }
 
-                // Trying to sit at a second table
-                if (currentTable != null && currentTable != target) {
+                
+                if (currentTable != null && currentTable != target) { // Trying to sit at a second table
                     System.out.println("You can't sit at two tables at once!");
                     System.out.println("You are already sitting at the " + currentTable.name + ".");
                     continue;
@@ -135,11 +153,9 @@ public class GameLoop {
                 currentTable = target;
             }
 
-            // -----------------------------
-            // UNSIT
-            // -----------------------------
+            //UNSIT
             else if (response.equals("UNSIT")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You are not sitting anywhere.");
                 } else {
                     currentTable.unSit();
@@ -147,22 +163,18 @@ public class GameLoop {
                 }
             }
 
-            // -----------------------------
-            // LOOK
-            // -----------------------------
+            //WHAT
             else if (response.startsWith("WHAT")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must sit at a table to check items.");
                 } else {
                     currentTable.lookAtItems();
                 }
             }
 
-            // -----------------------------
-            // WHO (check guests)
-            // -----------------------------
+            //WHO
             else if (response.equals("WHO")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table to check who is there.");
                 } else {
                     currentTable.checkGuests();
@@ -170,68 +182,77 @@ public class GameLoop {
             }
 
             // -----------------------------
-            // PERSON INTERACTIONS
+            //GUEST INTERACTIONS
             // -----------------------------
+
+            //GREET
             else if (response.startsWith("GREET ")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table to greet someone.");
                     continue;}
 
+                // separates input into its designated portions 
                 String name = response.substring(6).trim();
                 Person target = currentTable.getGuestByName(name);
 
-                if (target == null) {
+                if (target == null) { // checks if you are sitting at the same table as the guest you are trying to interact with
                     System.out.println(name + " is not at this table.");
                     continue;
                 }
 
-                target.greet();
+                target.greet(); // calls the method from Person Class
             }
 
+            //TELL
             else if (response.startsWith("TELL ")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table to tell someone something.");
                     continue;
                 }
                 
+                
                 String[] parts = response.split(" ", 3);
-                if (parts.length < 3) {
+                if (parts.length < 3) { // checks if user input has all information
                     System.out.println("Tell what to whom?");
                     continue;
                 }
                 
+                // separates input into its designated portions
                 String name = parts[1];
                 String gossip = parts[2];
 
                 Person target = currentTable.getGuestByName(name);
-                if (target == null) {
+                if (target == null) { // checks if you are sitting at the same table as the guest you are trying to interact with
                     System.out.println(name + " is not at this table.");
                     continue;
                 }
 
-                boolean lost = target.tell(gossip);
-                if (lost) {
+                boolean lost = target.tell(gossip); // calls the method from Person Class
+                if (lost) { 
                     playing = false;
                 }
             }
 
+            //GIVE
             else if (response.startsWith("GIVE ")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table to give someone something.");
                     continue;
                 }
                 
+                // 
                 String[] parts = response.split(" ", 3);
-                if (parts.length < 3) {
+                if (parts.length < 3) { // checks if user input has all information
                     System.out.println("Give what to whom?");
                     continue;
                 }
                 
+                // separates input into its designated portions
                 String name = parts[1];
                 String present = parts[2];
 
                 Person target = currentTable.getGuestByName(name);
-                if (target == null) {
+                if (target == null) { // checks if you are sitting at the same table as the guest you are trying to interact with
                     System.out.println(name + " is not at this table.");
                     continue;
                 }
@@ -241,199 +262,222 @@ public class GameLoop {
                      continue;
                     }
 
-                boolean lost = target.give(present);
+                boolean lost = target.give(present); // calls the method from Person Class
                 if (lost) {
                     playing = false;
                 }
             }
 
+            //FAREWELL
             else if (response.startsWith("FAREWELL ")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table say farewell to someone.");
                     continue;}
 
+                // separates input into its designated portions
                 String name = response.substring(8).trim();
                 Person target = currentTable.getGuestByName(name);
 
-                if (target == null) {
+                if (target == null) { // checks if you are sitting at the same table as the guest you are trying to interact with
                     System.out.println(name + " is not at this table.");
                     continue;
                 }
 
-                target.farewell();
+                target.farewell(); // calls the method from Person Class
             }
 
+            //WHO IS
             else if (response.startsWith("WHO IS ")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table to check who someone is.");
                     continue;}
 
+                // separates input into its designated portions
                 String name = response.substring(7).trim();
                 Person target = currentTable.getGuestByName(name);
 
-                if (target == null) {
+                if (target == null) { // checks if you are sitting at the same table as the guest you are trying to interact with
                     System.out.println(name + " is not at this table.");
                     continue;
                 }
 
-                target.checkWho();
+                target.checkWho(); // calls the method from Person Class
             }
 
+            //INSULT
             else if (response.startsWith("INSULT ")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table to insult someone.");
                     continue;}
 
+                // separates input into its designated portions
                 String name = response.substring(7).trim();
                 Person target = currentTable.getGuestByName(name);
 
-                if (target == null) {
+                if (target == null) { // checks if you are sitting at the same table as the guest you are trying to interact with
                     System.out.println(name + " is not at this table.");
                     continue;
                 }
 
-                target.insult();
-                playing = false;
+                target.insult(); // calls the method from Person Class
+                playing = false; // you lose for insulting a guest
             }
 
+            //ATTACK
             else if (response.startsWith("ATTACK ")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table to attack someone.");
                     continue;}
 
+                // separates input into its designated portions
                 String name = response.substring(7).trim();
                 Person target = currentTable.getGuestByName(name);
 
-                if (target == null) {
+                if (target == null) { // checks if you are sitting at the same table as the guest you are trying to interact with
                     System.out.println(name + " is not at this table.");
                     continue;
                 }
 
-                target.attack();
-                playing = false;
+                target.attack(); // calls the method from Person Class
+                playing = false; // you lose for attacking a guest
             }
 
             // -----------------------------
             // ITEM INTERACTIONS
             // -----------------------------
+
+            //PICK UP
             else if (response.startsWith("PICK UP ")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table to pick up an item.");
                     continue;}
 
+                // separates input into its designated portions
                 String name = response.substring(8).trim();
                 Item target = currentTable.getItemByName(name);
 
-                if (target == null) {
+                if (target == null) { // checks if you are sitting at the same table as the item you are trying to interact with
                     System.out.println(name + " is not on this table.");
                     continue;
                 }
 
-                target.pickUp();
+                target.pickUp(); // calls the method from Item Class
             }
 
+            //PUT DOWN
             else if (response.startsWith("PUT DOWN ")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table to put down an item.");
                     continue;}
 
+                // separates input into its designated portions
                 String name = response.substring(9).trim();
                 Item target = currentTable.getItemByName(name);
 
-                if (target == null) {
+                if (target == null) { // checks if you are sitting at the same table as the item you are trying to interact with
                     System.out.println(name + " is not on this table.");
                     continue;
                 }
 
-                target.putDown();
+                target.putDown(); // calls the method from Item Class
             }
 
+            // LOOK AT
             else if (response.startsWith("LOOK AT ")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table to look at an item.");
                     continue;}
 
+                // separates input into its designated portions
                 String name = response.substring(8).trim();
                 Item target = currentTable.getItemByName(name);
 
-                if (target == null) {
+                if (target == null) { // checks if you are sitting at the same table as the item you are trying to interact with
                     System.out.println(name + " is not on this table.");
                     continue;
                 }
 
-                target.lookAt();
+                target.lookAt(); // calls the method from Item Class
             }
 
+            //EAT
             else if (response.startsWith("EAT ")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table to eat.");
                     continue;}
 
+                // separates input into its designated portions
                 String name = response.substring(4).trim();
                 Item target = currentTable.getItemByName(name);
 
-                if (target == null) {
+                if (target == null) { // checks if you are sitting at the same table as the item you are trying to interact with
                     System.out.println(name + " is not on this table.");
                     continue;
                 }
 
-                target.eat();
+                target.eat(); // calls the method from Item Class
             }
 
+            //OPEN
             else if (response.startsWith("OPEN ")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table to open something.");
                     continue;}
 
+                // separates input into its designated portions
                 String name = response.substring(5).trim();
                 Item target = currentTable.getItemByName(name);
 
-                if (target == null) {
+                if (target == null) { // checks if you are sitting at the same table as the item you are trying to interact with
                     System.out.println(name + " is not on this table.");
                     continue;
                 }
 
-                target.open();
+                target.open(); // calls the method from Item Class
             }
 
+            //THROW
             else if (response.startsWith("THROW")) {
-                if (currentTable == null) {
+                if (currentTable == null) { // checks if you are sitting at a table
                     System.out.println("You must be sitting at a table.");
                     continue;
                 }
                 
                 String rest = response.substring(5).trim();
                 
-                if (!rest.contains(" AT ")) {
+                if (!rest.contains(" AT ")) { // checks if the input specifies who to throw the object at
                     System.out.println("Throw what at who?");
                     continue;
                 }
                 
                 String[] parts = rest.split(" AT ");
                 
+                // separates input into its designated portions
                 String itemName = parts[0].trim();   
                 String personName = parts[1].trim();   
                 
                 Item item = currentTable.getItemByName(itemName);
                 Person person = currentTable.getGuestByName(personName);
                 
-                if (item == null) {
+                if (item == null) { // checks if that item is on the table
                     System.out.println("There is no " + itemName + " on this table.");
                     continue;
                 }
                 
-                if (person == null) {
+                if (person == null) { //checks if this guest is at the table
                     System.out.println(personName + " is not at this table.");
                     continue;
                 }
                 
-                item.throwAt(person);
-                playing = false;
+                item.throwAt(person); // calls the method from Item Class
+                playing = false; // you lose for throwing something at a guest
             }
 
             // -----------------------------
-            // HINTS
+            // HELPERS
             // -----------------------------
+
+            //HINT
             else if (response.equals("HINT")) {
                 System.out.println("Remeber you arrived with a bag full of gifts! You have to give it to correct guest to win!");
                 System.out.println("Don't remeber what you brought? Type: \"SACK REMINDER\"");
@@ -441,6 +485,7 @@ public class GameLoop {
                 System.out.println("Don't remeber what the tables are? Type: \"TABLES REMINDER\"");
             }
 
+            //SACK REMINDER
             else if (response.equals("SACK REMINDER")) {
                 System.out.println("------- Items in the Sack: -------");
                 System.out.println("• Earring, Eagles Jacket, Hockey Stick,");
@@ -448,6 +493,7 @@ public class GameLoop {
                 System.out.println("  Pencil, Monitor, Picture, Guitar, Buddha");
             }
 
+            //AVOIDS REMINDER
             else if (response.equals("AVOIDS REMINDER")) {
                 System.out.println("------- Words to Avoid: -------");
                 System.out.println("• Spanish, Eric, Cancer, Exwife, ");
@@ -455,18 +501,18 @@ public class GameLoop {
                 System.out.println("  Wedding, Mother, Girlfriend");
             }
 
+            //TABLES REMINDER
             else if (response.equals("TABLES REMINDER")) {
                 System.out.println("------- Tables: -------");
                 System.out.println("• Snack Table, Dining Table, Gift Table");
                 }
 
+            //BETTER HINT
             else if (response.equals("BETTER HINT")) {
                 System.out.println("You want a better hint? Fine! Either Elizabeth, Abby, or Sarah want the earrings!");
             }
 
-            // -----------------------------
-            // HELP
-            // -----------------------------
+            //HELP
             else if (response.equals("HELP")) {
                 System.out.println("******** Commands: ********");
                 System.out.println("------- Table Commands: -------");
@@ -518,6 +564,9 @@ public class GameLoop {
             }
         }
 
+        // -----------------------------
+        // END OF GAME
+        // -----------------------------
         userInput.close();
         System.out.println("******************");
         System.out.println("GAME OVER");

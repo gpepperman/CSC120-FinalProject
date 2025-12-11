@@ -49,7 +49,7 @@ Note: It's a good idea to also make this list available inside the game, in resp
     - give kate monitor
 
 
-# Commands
+## Commands
 
 ## Table Commands
 - "Sit {TABLE NAME}" lets you sit at a specific table
